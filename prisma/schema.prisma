@@ -1,0 +1,163 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---- USER MANAGEMENT ----
+
+model User {
+  id             String                 @id @default(uuid())
+  email          String                 @unique
+  password       String
+  name           String
+  role           UserRole
+  status         UserStatus             @default(active)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  lastAccessedAt DateTime?
+  conversations  Conversation[]
+  chatMessages   ChatMessage[]
+  passwordResets PasswordResetRequest[]
+  pdfDocuments   PDFDocument[]
+  humanTakeovers HumanTakeover[]
+}
+
+enum UserRole {
+  admin
+  agent
+}
+
+enum UserStatus {
+  active
+  inactive
+}
+
+model PasswordResetRequest {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ---- BOT SETTINGS ----
+
+model BotSettings {
+  id                 String          @id @default(uuid())
+  model              String
+  temperature        Float
+  systemInstructions String
+  tools              Json
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  faqs               FAQ[]
+  knowledgeBases     KnowledgeBase[]
+  pdfDocuments       PDFDocument[]
+  conversations      Conversation[]
+}
+
+// ---- KNOWLEDGE BASE ----
+
+model FAQ {
+  id            String      @id @default(uuid())
+  botSettingsId String
+  botSettings   BotSettings @relation(fields: [botSettingsId], references: [id])
+  question      String
+  answer        String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+// PDF Uploads (could also be 'Document')
+model PDFDocument {
+  id             String          @id @default(uuid())
+  fileName       String
+  url            String
+  uploadedBy     String?
+  uploader       User?           @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
+  botSettingsId  String
+  botSettings    BotSettings     @relation(fields: [botSettingsId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  // For each chunk of text extracted from PDF, use embedding for RAG
+  chunks         Json
+  knowledgeBases KnowledgeBase[]
+}
+
+// Knowledge Base
+model KnowledgeBase {
+  id            String                      @id @default(uuid())
+  botSettingsId String
+  botSettings   BotSettings                 @relation(fields: [botSettingsId], references: [id])
+  pdfDocumentId String?
+  pdfDocument   PDFDocument?                @relation(fields: [pdfDocumentId], references: [id], onDelete: Cascade)
+  text          String // The actual text content for this knowledge base entry
+  embeddings    Unsupported("vector(1536)") // Vector embeddings using pgvector
+  metadata      Json? // Additional metadata (type, source info, etc.)
+  createdAt     DateTime                    @default(now())
+  updatedAt     DateTime                    @updatedAt
+}
+
+// ---- CHAT AND HISTORY ----
+
+model Conversation {
+  id             String          @id @default(uuid())
+  customerId     String // Anonymous, or you can extend with customer profile
+  userId         String? // Agent assigned to chat
+  user           User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  botSettingsId  String
+  botSettings    BotSettings     @relation(fields: [botSettingsId], references: [id])
+  status         ChatStatus      @default(auto)
+  customerIp     String? // Customer IP address
+  lastMessageAt  DateTime? // Timestamp of the last message in this conversation
+  messagesAmount Int             @default(0) // Total number of messages in this conversation
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  chatMessages   ChatMessage[]
+  humanTakeovers HumanTakeover[]
+}
+
+enum ChatStatus {
+  auto
+  human
+  pending
+  closed
+}
+
+model ChatMessage {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  userId         String? // Agent/user who sent the message (optional)
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  message        String
+  role           MessageRole
+  createdAt      DateTime     @default(now())
+}
+
+enum MessageRole {
+  user
+  bot
+  agent
+}
+
+// ---- HUMAN TAKEOVER AUDIT ----
+
+model HumanTakeover {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  triggeredById  String?
+  triggeredBy    User?        @relation(fields: [triggeredById], references: [id], onDelete: SetNull)
+  reason         String? // "agent takeover", "user requested", etc.
+  createdAt      DateTime     @default(now())
+}

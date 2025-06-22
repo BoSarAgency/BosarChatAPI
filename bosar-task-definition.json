@@ -1,0 +1,91 @@
+{
+  "family": "bosar-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::160885246604:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::160885246604:role/ecsTaskRole",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "containerDefinitions": [
+    {
+      "name": "bosar-api",
+      "image": "160885246604.dkr.ecr.us-west-1.amazonaws.com/bosar-api:latest",
+      "portMappings": [
+        {
+          "containerPort": 3001,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "PORT",
+          "value": "3001"
+        },
+        {
+          "name": "DATABASE_URL",
+          "value": ""
+        },
+        {
+          "name": "JWT_SECRET",
+          "value": "bosar_dashboard_platform"
+        },
+        {
+          "name": "JWT_EXPIRES_IN",
+          "value": "24h"
+        },
+        {
+          "name": "POSTMARK_API_KEY",
+          "value": ""
+        },
+        {
+          "name": "FROM_EMAIL",
+          "value": "noreply@bosar.click"
+        },
+        {
+          "name": "FRONTEND_URL",
+          "value": ""
+        },
+        {
+          "name": "OPENAI_API_KEY",
+          "value": ""
+        },
+        {
+          "name": "WEBSOCKET_PING_TIMEOUT",
+          "value": "60000"
+        },
+        {
+          "name": "WEBSOCKET_PING_INTERVAL",
+          "value": "25000"
+        },
+        {
+          "name": "WEBSOCKET_HEARTBEAT_INTERVAL",
+          "value": "30000"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/bosar-task",
+          "awslogs-region": "us-west-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -f http://localhost:3001/api || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      }
+    }
+  ]
+}
