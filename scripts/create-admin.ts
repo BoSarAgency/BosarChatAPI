@@ -9,7 +9,7 @@ async function createAdmin() {
   try {
     console.log('🔧 Creating new admin user...');
 
-    const email = '-';
+    const email = '';
     const password = '-';
     const name = '-';
 

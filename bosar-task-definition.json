@@ -36,7 +36,7 @@
         },
         {
           "name": "JWT_SECRET",
-          "value": "bosar_dashboard_platform"
+          "value": ""
         },
         {
           "name": "JWT_EXPIRES_IN",
@@ -48,15 +48,31 @@
         },
         {
           "name": "FROM_EMAIL",
-          "value": "noreply@bosar.click"
+          "value": ""
         },
         {
           "name": "FRONTEND_URL",
-          "value": ""
+          "value": "https://"
         },
         {
           "name": "OPENAI_API_KEY",
           "value": ""
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "us-west-1"
+        },
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "value": ""
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "value": ""
+        },
+        {
+          "name": "AWS_S3_BUCKET",
+          "value": "your-uploads"
         },
         {
           "name": "WEBSOCKET_PING_TIMEOUT",
@@ -80,7 +96,10 @@
         }
       },
       "healthCheck": {
-        "command": ["CMD-SHELL", "curl -f http://localhost:3001/api || exit 1"],
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:3001/health || exit 1"
+        ],
         "interval": 30,
         "timeout": 5,
         "retries": 3,
