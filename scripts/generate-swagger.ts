@@ -8,8 +8,8 @@ async function generateSwaggerJson() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('ACQG API')
-    .setDescription('API for ACQG chat management dashboard')
+    .setTitle('BoSar API')
+    .setDescription('API for BoSar chat management dashboard')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

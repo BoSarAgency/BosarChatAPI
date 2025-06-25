@@ -1,4 +1,4 @@
-# ACQG API
+# BoSar API
 
 A NestJS-based API for managing customer chat conversations with AI bot integration and human takeover capabilities.
 

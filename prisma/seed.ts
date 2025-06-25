@@ -88,7 +88,7 @@ async function main() {
       {
         question: 'How can I contact support?',
         answer:
-          'You can contact support through this chat, email us at support@bosar.com, or call us at 1-800-ACQG-HELP.',
+          'You can contact support through this chat, email us at support@bosar.com, or call us at 1-800-BoSar-HELP.',
       },
       {
         question: 'What is your refund policy?',

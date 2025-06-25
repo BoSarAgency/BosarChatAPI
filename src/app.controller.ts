@@ -21,7 +21,7 @@ export class AppController {
     return {
       status: 'ok',
       timestamp: new Date().toISOString(),
-      service: 'ACQG API',
+      service: 'BoSar API',
       version: '1.0.0',
     };
   }

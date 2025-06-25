@@ -143,9 +143,9 @@ export class EmailService {
    * Send a welcome email template
    */
   async sendWelcomeEmail(to: string, userName?: string): Promise<EmailResult> {
-    const subject = 'Welcome to ACQG';
+    const subject = 'Welcome to BoSar';
     const html = this.getWelcomeEmailTemplate(userName);
-    const text = `Welcome to ACQG${userName ? `, ${userName}` : ''}!\n\nThank you for joining us. We're excited to have you on board.`;
+    const text = `Welcome to BoSar${userName ? `, ${userName}` : ''}!\n\nThank you for joining us. We're excited to have you on board.`;
 
     return this.sendEmail({
       to,
@@ -189,14 +189,14 @@ export class EmailService {
       <html>
         <head>
           <meta charset="utf-8">
-          <title>Welcome to ACQG</title>
+          <title>Welcome to BoSar</title>
         </head>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h1 style="color: #2c3e50;">Welcome to ACQG${userName ? `, ${userName}` : ''}!</h1>
+            <h1 style="color: #2c3e50;">Welcome to BoSar${userName ? `, ${userName}` : ''}!</h1>
             <p>Thank you for joining us. We're excited to have you on board.</p>
             <p>If you have any questions, feel free to reach out to our support team.</p>
-            <p>Best regards,<br>The ACQG Team</p>
+            <p>Best regards,<br>The BoSar Team</p>
           </div>
         </body>
       </html>
@@ -217,7 +217,7 @@ export class EmailService {
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
             <h1 style="color: #2c3e50;">Password Reset Request</h1>
-            <p>You requested a password reset for your ACQG account.</p>
+            <p>You requested a password reset for your BoSar account.</p>
             <p>Click the button below to reset your password:</p>
             <div style="text-align: center; margin: 30px 0;">
               <a href="${resetUrl}" style="background-color: #3498db; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">Reset Password</a>
@@ -226,7 +226,7 @@ export class EmailService {
             <p style="word-break: break-all; color: #3498db;">${resetUrl}</p>
             <p><strong>Note:</strong> This link will expire in 24 hours for security reasons.</p>
             <p>If you didn't request this password reset, please ignore this email.</p>
-            <p>Best regards,<br>The ACQG Team</p>
+            <p>Best regards,<br>The BoSar Team</p>
           </div>
         </body>
       </html>

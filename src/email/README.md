@@ -1,6 +1,6 @@
 # Email Service Module
 
-This module provides email functionality using Postmark for the ACQG API.
+This module provides email functionality using Postmark for the BoSar API.
 
 ## Features
 
@@ -112,9 +112,9 @@ interface EmailResult {
 
 ### Welcome Email Template
 
-- **Subject**: "Welcome to ACQG"
+- **Subject**: "Welcome to BoSar"
 - **Content**: Branded HTML template with user name
-- **Styling**: Responsive design with ACQG branding
+- **Styling**: Responsive design with BoSar branding
 
 ### Password Reset Email Template
 

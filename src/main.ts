@@ -40,8 +40,8 @@ async function bootstrap() {
   // Swagger configuration (only in development)
   if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
-      .setTitle('ACQG API')
-      .setDescription('API for ACQG chat management dashboard')
+      .setTitle('BoSar API')
+      .setDescription('API for BoSar chat management dashboard')
       .setVersion('1.0')
       .addBearerAuth()
       .build();

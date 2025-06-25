@@ -40,7 +40,7 @@ export class SendEmailDto {
 
   @ApiProperty({
     description: 'Email subject',
-    example: 'Welcome to ACQG',
+    example: 'Welcome to BoSar',
   })
   @IsString()
   subject: string;
